@@ -1,49 +1,50 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
+
   "parameters": {
     "name": {
-      "value": "keuvault"
+      "value": "keyab" 
     },
     "location": {
-      "value": "canadacentral"
+      "value": "eastus" 
     },
     "sku": {
-      "value": "Standard"
+      "value": "Standard" 
     },
     "accessPolicies": {
-      "value": []
+      "value": [] 
     },
     "tenant": {
-      "value": "185bfdad-60f6-4944-83f3-f49a95deee1a"
+      "value": "185bfdad-60f6-4944-83f3-f49a95deee1a" 
     },
     "enabledForDeployment": {
       "value": true
     },
     "enabledForTemplateDeployment": {
-      "value": true
+      "value": true 
     },
     "enabledForDiskEncryption": {
-      "value": false
+      "value": false 
     },
     "enableRbacAuthorization": {
-      "value": true
+      "value": true 
     },
     "publicNetworkAccess": {
-      "value": "Enabled"
+      "value": "Enabled" 
     },
     "enableSoftDelete": {
-      "value": true
+      "value": true 
     },
     "softDeleteRetentionInDays": {
-      "value": 7
+      "value": 7 
     },
     "networkAcls": {
       "value": {
-        "defaultAction": "allow",
-        "bypass": "AzureServices",
+        "defaultAction": "allow", 
+        "bypass": "AzureServices", 
         "ipRules": [],
-        "virtualNetworkRules": []
+        "virtualNetworkRules": [] 
       }
     }
   }
