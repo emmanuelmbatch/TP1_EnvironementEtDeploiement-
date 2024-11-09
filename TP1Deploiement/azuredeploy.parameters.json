@@ -2,5 +2,152 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "value": "canadacentral"
+    },
+    "osDiskType": {
+      "value": "StandardSSD_LRS"
+    },
+    "virtualNetworkId": {
+      "value": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/virtualNetworks/vnet-canadacentral-1"
+    },
+    "virtualNetworkName": {
+      "value": "vnet-canadacentral-1"
+    },
+    "backendPoolId": {
+      "value": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/loadBalancers/balancer1/backendAddressPools/bepool"
+    },
+    "networkSecurityGroups": {
+      "value": [
+        {
+          "name": "basicNsgvnet-canadacentral-1-nic01",
+          "id": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/networkSecurityGroups/basicNsgvnet-canadacentral-1-nic01",
+          "rules": []
+        }
+      ]
+    },
+    "networkInterfaceConfigurations": {
+      "value": [
+        {
+          "name": "vnet-canadacentral-1-nic01",
+          "primary": true,
+          "subnetId": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/virtualNetworks/vnet-canadacentral-1/subnets/snet-canadacentral-1",
+          "applicationGatewayBackendAddressPools": [],
+          "loadBalancerBackendAddressPools": [
+            {
+              "id": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/loadBalancers/balancer1/backendAddressPools/bepool"
+            }
+          ],
+          "applicationSecurityGroups": [],
+          "loadBalancerInboundNatPools": [],
+          "enableAcceleratedNetworking": false,
+          "nsgName": "basicNsgvnet-canadacentral-1-nic01",
+          "nsgId": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/Emma/providers/Microsoft.Network/networkSecurityGroups/basicNsgvnet-canadacentral-1-nic01",
+          "pipName": "publicIp-vnet-canadacentral-1-nic01"
+        }
+      ]
+    },
+    "vmName": {
+      "value": "VMss1"
+    },
+    "virtualMachineScaleSetName": {
+      "value": "VMss1"
+    },
+    "instanceCount": {
+      "value": "2"
+    },
+    "instanceSize": {
+      "value": "Standard_D2s_v3"
+    },
+    "zone": {
+      "value": [
+        "1",
+        "3"
+      ]
+    },
+    "zoneBalance": {
+      "value": "false"
+    },
+    "platformFaultDomainCount": {
+      "value": "1"
+    },
+    "scaleInPolicy": {
+      "value": {
+        "rules": [
+          "Default"
+        ],
+        "forceDeletion": false
+      }
+    },
+    "upgradePolicy": {
+      "value": "Manual"
+    },
+    "hibernationEnabled": {
+      "value": false
+    },
+    "adminUsername": {
+      "value": "vmadmin"
+    },
+    "adminPassword": {
+      "value": null
+    },
+    "customData": {
+      "value": null
+    },
+    "securityType": {
+      "value": "TrustedLaunch"
+    },
+    "secureBoot": {
+      "value": true
+    },
+    "vTPM": {
+      "value": true
+    },
+    "vnetLocation": {
+      "value": "canadacentral"
+    },
+    "vnetExtendedLocation": {
+      "value": {}
+    },
+    "vnetVirtualNetworkName": {
+      "value": "vnet-canadacentral-1"
+    },
+    "vnetResourceGroupName": {
+      "value": "Emma"
+    },
+    "vnetDeploymentName": {
+      "value": "network-interface-associated-virtual-network-20241108200500"
+    },
+    "vnetNatGatewaysWithNewPublicIpAddress": {
+      "value": []
+    },
+    "vnetNatGatewaysWithoutNewPublicIpAddress": {
+      "value": []
+    },
+    "vnetNatGatewayPublicIpAddressesNewNames": {
+      "value": []
+    },
+    "vnetNetworkSecurityGroupsNew": {
+      "value": []
+    },
+    "vnetProperties": {
+      "value": {
+        "subnets": [
+          {
+            "name": "snet-canadacentral-1",
+            "properties": {
+              "addressPrefixes": [
+                "172.17.0.0/24"
+              ]
+            }
+          }
+        ],
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.17.0.0/16"
+          ]
+        }
+      }
+    }
   }
 }
