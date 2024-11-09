@@ -5,6 +5,9 @@
     "name": {
       "type": "String"
     },
+    "secretValue": {
+      "type": "securestring"
+    },
     "location": {
       "type": "String"
     },
@@ -37,9 +40,6 @@
     },
     "softDeleteRetentionInDays": {
       "type": "Int"
-    },
-    "secretValue": {
-      "type": "securestring"
     },
     "networkAcls": {
       "type": "Object"
