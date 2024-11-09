@@ -23,19 +23,8 @@ steps:
 - script: |
     echo $(CloudInitContent)
 
-- task: AzureResourceManagerTemplateDeployment@3
-  inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
-    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'
-    action: 'Create Or Update Resource Group'
-    resourceGroupName: 'TP1'
-    location: 'Canada Central'
-    templateLocation: 'Linked artifact'
-    csmFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.json'
-    csmParametersFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.parameters.json'
-    overrideParameters: '-customData $(CloudInitContent) -adminPassword $(vmadmin)'
-    deploymentMode: 'Validation'
+
+
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
