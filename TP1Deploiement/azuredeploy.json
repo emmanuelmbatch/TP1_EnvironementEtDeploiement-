@@ -140,7 +140,7 @@
     },
     "vnetResourceGroupName": {
       "type": "string",
-      "defaultValue": "Emma"
+      "defaultValue": "TP1"
     },
     "vnetDeploymentName": {
       "type": "string",
