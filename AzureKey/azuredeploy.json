@@ -38,6 +38,9 @@
     "softDeleteRetentionInDays": {
       "type": "Int"
     },
+    "secretValue": {
+      "type": "securestring"
+    },
     "networkAcls": {
       "type": "Object"
     }
