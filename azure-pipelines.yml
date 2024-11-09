@@ -32,7 +32,7 @@ steps:
     resourceGroupName: 'TP1_Key_Vault'
     location: 'Canada Central'
     templateLocation: 'Linked artifact'
-    csmFile: '$(Build.SourcesDirectory)\TP1Deploiement\AzureKey\AzureKey\azuredeploy.json'
+    csmFile: '$(Build.SourcesDirectory)/TP1Deploiement/AzureKey/AzureKey/azuredeploy.json'
     csmParametersFile: '$(Build.SourcesDirectory)/TP1Deploiement/AzureKey/AzureKey/azuredeploy.parameters.json'
     overrideParameters: '-name KeyValueTp -secretValue $(vmadmin)'
     deploymentMode: 'Incremental'
