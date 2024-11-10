@@ -5,6 +5,12 @@
     "name": {
       "type": "string"
     },
+    "secretName": {
+      "type": "string"
+    },
+    "secretValue": {
+      "type": "securestring"
+    },
     "location": {
       "type": "string"
     },
