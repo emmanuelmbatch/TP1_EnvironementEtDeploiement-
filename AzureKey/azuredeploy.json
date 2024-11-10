@@ -1,8 +1,6 @@
 {
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-
-  
   "parameters": {
     "name": {
       "type": "string"
@@ -42,19 +40,9 @@
     },
     "networkAcls": {
       "type": "object"
-    },
-    "secretName": {
-      "type": "string"
-    },
-    "secretValue": {
-      "type": "securestring"
     }
   },
-
-  
   "variables": {},
-
-  
   "resources": [
     {
       "apiVersion": "2023-08-01-preview",
@@ -79,21 +67,6 @@
       },
       "tags": {},
       "dependsOn": []
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2023-08-01-preview",
-      "name": "[concat(parameters('name'), '/', parameters('secretName'))]",
-      "dependsOn": [
-        "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]"
-      ],
-      "properties": {
-        "contentType": "Administrator Password Use for VM",
-        "attributes": {
-          "enabled": true
-        },
-        "value": "[parameters('secretValue')]"
-      }
     }
   ],
   "outputs": {}
