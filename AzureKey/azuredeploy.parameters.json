@@ -5,6 +5,12 @@
     "name": {
       "value": "ketva"
     },
+    "secretName": {
+      "value": null
+    },
+    "secretValue": {
+      "value": null
+    },
     "location": {
       "value": "canadacentral"
     },
