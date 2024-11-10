@@ -34,7 +34,7 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'
     csmParametersFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'
-    overrideParameters: '-location canadacentral'
+    overrideParameters: '-name KeyValueTp -secretName vmadmin -secretValue $(vmadmin)'
     deploymentMode: 'Incremental'
     deploymentOutputs: 'KeyVaultDeployement'
 
