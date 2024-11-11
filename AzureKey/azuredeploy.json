@@ -5,13 +5,6 @@
     "vaults_KeyVaultas_name": {
       "defaultValue": "KeyVaultas",
       "type": "String"
-    },
-    "secretName": {
-      "defaultValue": "vmadmi",
-      "type": "string"
-    },
-    "secretValue": {
-      "type": "securestring"
     }
   },
   "variables": {},
@@ -37,20 +30,6 @@
         "vaultUri": "https://keyvaultas.vault.azure.net/",
         "provisioningState": "Succeeded",
         "publicNetworkAccess": "Enabled"
-      }
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "apiVersion": "2024-04-01-preview",
-      "name": "[concat(parameters('vaults_KeyVaultas_name'), '/vmadmi')]",
-      "location": "canadacentral",
-      "dependsOn": [
-        "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_KeyVaultas_name'))]"
-      ],
-      "properties": {
-        "attributes": {
-          "enabled": true
-        }
       }
     }
   ]
