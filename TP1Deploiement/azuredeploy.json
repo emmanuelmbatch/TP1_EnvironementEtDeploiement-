@@ -223,6 +223,7 @@
           "virtualMachineProfile": { "networkProfile": { "networkInterfaceConfigurations": "[parameters('networkInterfaceConfigurations')]" } }
         }
       }
+  
   ],
 
   // Output configuration to return information on deployed resources
