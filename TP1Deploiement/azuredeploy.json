@@ -1,236 +1,191 @@
 {
-  // Deployment schema for an ARM template, defining the schema version and content
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-
-  // Declaration of parameters used for configuration and deployment customization
+  "contentVersion": "1.0.0.0", // Version du modèle de déploiement
   "parameters": {
-    // Configuration parameters for virtual network, network interface, and security settings
-    "location": { "type": "string" },
-    "osDiskType": { "type": "string" },
-    "virtualNetworkId": { "type": "string" },
-    "virtualNetworkName": { "type": "string" },
-    "networkSecurityGroups": { "type": "array" },
-    "networkInterfaceConfigurations": { "type": "array" },
-
-    // Parameters for backend pool configuration and load balancer
-    "backendPoolName": { "type": "string" },
-    "loadBalancerName": { "type": "string" },
-    "loadbalancingRuleFrontEndPort": { "type": "int" },
-    "loadbalancingRuleBackendEndPort": { "type": "int" },
-    "loadbalancingRuleProtocol": { "type": "string" },
-    "InboundNATRuleFrontEndPortRangeStart": { "type": "int" },
-
-    // VM and scale set configuration parameters
-    "vmName": { "type": "string" },
-    "virtualMachineScaleSetName": { "type": "string" },
-    "instanceCount": { "type": "string" },
-    "instanceSize": { "type": "string" },
-    "zone": { "type": "array" },
-    "zoneBalance": { "type": "string" },
-    "platformFaultDomainCount": { "type": "string" },
-    "scaleInPolicy": { "type": "object" },
-    "upgradePolicy": { "type": "string" },
-    "hibernationEnabled": { "type": "bool" },
-
-    // Parameters for security configuration and admin access settings
-    "adminUsername": { "type": "string" },
-    "adminPassword": { "type": "secureString" },
-    "customData": { "type": "secureString" },
-    "securityType": { "type": "string" },
-    "secureBoot": { "type": "bool" },
-    "vTPM": { "type": "bool" },
-
-    // Advanced virtual network configuration parameters
+    "location": { "type": "string" }, // Emplacement de la ressource
+    "osDiskType": { "type": "string" }, // Type de disque pour le système d'exploitation
+    "virtualNetworkId": { "type": "string" }, // ID du réseau virtuel
+    "virtualNetworkName": { "type": "string" }, // Nom du réseau virtuel
+    "networkSecurityGroups": { "type": "array" }, // Groupe de sécurité réseau
+    "networkInterfaceConfigurations": { "type": "array" }, // Configurations d'interface réseau
+    "backendPoolName": { "type": "string" }, // Nom du backend pool
+    "loadBalancerName": { "type": "string" }, // Nom du load balancer
+    "loadbalancingRuleFrontEndPort": { "type": "int" }, // Port frontal du load balancer
+    "loadbalancingRuleBackendEndPort": { "type": "int" }, // Port arrière du load balancer
+    "loadbalancingRuleProtocol": { "type": "string" }, // Protocole du load balancer
+    "InboundNATRuleFrontEndPortRangeStart": { "type": "int" }, // Plage de ports d'entrée NAT
+    "vmName": { "type": "string" }, // Nom de la machine virtuelle
+    "virtualMachineScaleSetName": { "type": "string" }, // Nom du jeu d'échelles de machines virtuelles
+    "instanceCount": { "type": "string" }, // Nombre d'instances
+    "instanceSize": { "type": "string" }, // Taille des instances
+    "zone": { "type": "array" }, // Zones de disponibilité
+    "zoneBalance": { "type": "string" }, // Politique de répartition des zones
+    "platformFaultDomainCount": { "type": "string" }, // Nombre de domaines de pannes de la plateforme
+    "scaleInPolicy": { "type": "object" }, // Politique de mise à l'échelle vers l'intérieur
+    "upgradePolicy": { "type": "string" }, // Politique de mise à jour
+    "hibernationEnabled": { "type": "bool" }, // Activer l'hibernation
+    "adminUsername": { "type": "string" }, // Nom d'utilisateur de l'administrateur
+    "adminPassword": { "type": "secureString" }, // Mot de passe de l'administrateur
+    "customData": { "type": "secureString" }, // Données personnalisées (par exemple, pour la configuration)
+    "securityType": { "type": "string" }, // Type de sécurité
+    "secureBoot": { "type": "bool" }, // Activer le démarrage sécurisé
+    "vTPM": { "type": "bool" }, // Activer le module de plateforme fiable virtuel
     "vnetLocation": {
       "type": "string",
-      "metadata": { "description": "Azure region for the deployment, resource group and resources." },
       "defaultValue": "canadacentral"
-    },
+    }, // Emplacement du réseau virtuel
     "vnetExtendedLocation": {
       "type": "object",
       "defaultValue": {}
-    },
+    }, // Emplacement étendu pour les ressources
     "vnetVirtualNetworkName": {
       "type": "string",
-      "defaultValue": "vnet-canadacentral",
-      "metadata": { "description": "Name of the virtual network resource." }
-    },
+      "defaultValue": "vnet-canadacentral"
+    }, // Nom du réseau virtuel
     "vnetTagsByResource": {
       "type": "object",
-      "defaultValue": {},
-      "metadata": { "description": "Optional tags for the resources." }
-    },
+      "defaultValue": {}
+    }, // Tags des ressources pour le réseau virtuel
     "vnetProperties": {
       "type": "object",
       "defaultValue": {
         "subnets": [
           {
-            "name": "snet-canadacentral-1",
-            "properties": { "addressPrefixes": [ "172.16.0.0/24" ] }
+            "name": "snet-canadacentral-1", // Nom du sous-réseau
+            "properties": { "addressPrefixes": [ "172.16.0.0/24" ] } // Plage d'adresses du sous-réseau
           }
         ],
-        "addressSpace": { "addressPrefixes": [ "172.16.0.0/16" ] }
+        "addressSpace": { "addressPrefixes": [ "172.16.0.0/16" ] } // Plage d'adresses du réseau virtuel
       }
     },
     "vnetNatGatewaysWithNewPublicIpAddress": {
       "type": "array",
       "defaultValue": []
-    },
+    }, // Liste des passerelles NAT avec nouvelle adresse IP publique
     "vnetNatGatewaysWithoutNewPublicIpAddress": {
       "type": "array",
       "defaultValue": []
-    },
+    }, // Liste des passerelles NAT sans nouvelle adresse IP publique
     "vnetNatGatewayPublicIpAddressesNewNames": {
       "type": "array",
-      "metadata": { "description": "Array of public ip addresses for NAT Gateways." },
       "defaultValue": []
-    },
+    }, // Noms des nouvelles adresses IP publiques pour la passerelle NAT
     "vnetNetworkSecurityGroupsNew": {
       "type": "array",
-      "metadata": { "description": "Array of NAT Gateway objects for subnets." },
       "defaultValue": []
-    },
+    }, // Liste des nouveaux groupes de sécurité pour le réseau virtuel
     "vnetResourceGroupName": {
       "type": "string",
       "defaultValue": "TP1"
-    },
+    }, // Nom du groupe de ressources pour le réseau virtuel
     "vnetDeploymentName": {
       "type": "string",
       "defaultValue": "network-interface-associated-virtual-network-20241109164215"
-    }
+    } // Nom du déploiement pour le réseau virtuel
   },
-
-  // Declaration of variables to simplify resource configuration
   "variables": {
-    // API versions for storage, networking, and the scale set
-    "storageApiVersion": "2021-01-01",
-    "networkApiVersion": "2020-11-01",
-    "virtualMachineScaleSetApiVersion": "2024-07-01",
-
-    // Additional variables for naming configuration and scale set settings
-    "namingInfix": "[toLower(substring(concat(parameters('virtualMachineScaleSetName'), uniqueString(resourceGroup().id)), 0, 9))]",
-    "autoScaleResourceName": "[concat(substring(parameters('virtualMachineScaleSetName'), 0, min(length(parameters('virtualMachineScaleSetName')), 55)), 'autoscale')]",
-    "vmssId": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSetName'))]",
-    "standardSku": { "name": "Standard" },
-    "vnetStaticAllocation": { "publicIPAllocationMethod": "Static" },
-    "vnetPremiumTier": { "tier": "Premium" },
-    "vnetPublicIpAddressesTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('vnetTagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}'))]",
-    "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"
+    "storageApiVersion": "2021-01-01", // Version de l'API pour le stockage
+    "networkApiVersion": "2020-11-01", // Version de l'API pour le réseau
+    "virtualMachineScaleSetApiVersion": "2024-07-01", // Version de l'API pour le jeu d'échelles de machines virtuelles
+    "namingInfix": "[toLower(substring(concat(parameters('virtualMachineScaleSetName'), uniqueString(resourceGroup().id)), 0, 9))]", // Infixe pour nommer les ressources
+    "autoScaleResourceName": "[concat(substring(parameters('virtualMachineScaleSetName'), 0, min(length(parameters('virtualMachineScaleSetName')), 55)), 'autoscale')]", // Nom des ressources d'auto-échelle
+    "vmssId": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSetName'))]", // ID du jeu d'échelles de machines virtuelles
+    "standardSku": { "name": "Standard" }, // SKU standard pour les ressources
+    "vnetStaticAllocation": { "publicIPAllocationMethod": "Static" }, // Méthode d'allocation d'IP publique statique
+    "vnetPremiumTier": { "tier": "Premium" }, // Niveau premium pour le réseau virtuel
+    "vnetPublicIpAddressesTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/publicIpAddresses'), parameters('vnetTagsByResource')['Microsoft.Network/publicIpAddresses'], json('{}'))]", // Tags des adresses IP publiques
+    "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]" // Tags des passerelles NAT
   },
-
-  // Declaration of resources to deploy with specific configurations for each component
   "resources": [
-    // Network security group with a copy loop to create multiple security groups
     {
       "name": "[parameters('networkSecurityGroups')[copyIndex()].name]",
       "type": "Microsoft.Network/networkSecurityGroups",
-      "apiVersion": "2020-05-01",
+      "apiVersion": "2020-05-01", // Version de l'API pour les groupes de sécurité réseau
       "location": "[parameters('location')]",
-      "properties": { "securityRules": "[parameters('networkSecurityGroups')[copyIndex()].rules]" },
+      "properties": { "securityRules": "[parameters('networkSecurityGroups')[copyIndex()].rules]" }, // Règles de sécurité pour chaque groupe
       "copy": {
         "name": "networkSecurityGroups",
-        "count": "[length(parameters('networkSecurityGroups'))]"
+        "count": "[length(parameters('networkSecurityGroups'))]" // Copie des groupes de sécurité en fonction de leur nombre
       }
     },
-
-    // Public IP address associated with the load balancer
     {
       "name": "[concat(parameters('loadBalancerName'), '-publicip')]",
       "type": "Microsoft.Network/publicIpAddresses",
-      "apiVersion": "2020-08-01",
+      "apiVersion": "2020-08-01", // Version de l'API pour les adresses IP publiques
       "location": "[parameters('location')]",
       "properties": {
-        "publicIpAllocationMethod": "Static",
-        "publicIPAddressVersion": "IPv4",
-        "idleTimeoutInMinutes": 15
+        "publicIpAllocationMethod": "Static", // Allocation d'IP statique
+        "publicIPAddressVersion": "IPv4", // Version IPv4 pour l'adresse IP
+        "idleTimeoutInMinutes": 15 // Timeout d'inactivité en minutes
       },
-      "sku": { "name": "Standard" },
-      "zones": [ "1", "3" ]
+      "sku": { "name": "Standard" }, // SKU standard pour l'adresse IP publique
+      "zones": [ "1", "3" ] // Zones de disponibilité pour l'adresse IP publique
     },
-
-    // Definition of the load balancer with configuration of load balancing rules, NAT, and probes
     {
       "name": "[parameters('loadBalancerName')]",
       "type": "Microsoft.Network/loadBalancers",
-      "apiVersion": "2021-05-01",
+      "apiVersion": "2021-05-01", // Version de l'API pour le load balancer
       "location": "[parameters('location')]",
-      "sku": { "name": "Standard" },
       "properties": {
         "frontendIPConfigurations": [
           {
             "name": "[concat(parameters('loadBalancerName'), '-frontendconfig01')]",
-            "properties": { "publicIPAddress": { "id": "[resourceId('Microsoft.Network/publicIpAddresses', concat(parameters('loadBalancerName'), '-publicip'))]" } }
+            "properties": {
+              "publicIPAllocationMethod": "Static", // Allocation statique pour l'IP du frontend
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIpAddresses', concat(parameters('loadBalancerName'), '-publicip'))]" // Référence à l'adresse IP publique
+              }
+            }
           }
         ],
-        "backendAddressPools": [ { "name": "[parameters('backendPoolName')]" } ],
+        "backendAddressPools": [
+          {
+            "name": "[parameters('backendPoolName')]",
+            "properties": {
+              "backendAddresses": [ { "ipAddress": "172.16.0.4" } ] // Exemple d'adresse backend
+            }
+          }
+        ],
         "loadBalancingRules": [
           {
-            "name": "[concat(parameters('loadBalancerName'), '-lbrule01')]",
+            "name": "[concat(parameters('loadBalancerName'), '-rule01')]",
             "properties": {
-              "frontendIPConfiguration": { "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', parameters('loadBalancerName'), concat(parameters('loadBalancerName'), '-frontendconfig01'))]" },
-              "backendAddressPool": { "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancerName'), parameters('backendPoolName'))]" },
-              "frontendPort": "[parameters('loadbalancingRuleFrontEndPort')]",
-              "backendPort": "[parameters('loadbalancingRuleBackendEndPort')]",
-              "enableFloatingIP": false,
-              "idleTimeoutInMinutes": 15,
-              "disableOutboundSnat": true,
-              "loadDistribution": "Default",
-              "protocol": "[parameters('loadbalancingRuleProtocol')]",
-              "probe": { "id": "[resourceId('Microsoft.Network/loadBalancers/probes', parameters('loadBalancerName'), concat(parameters('loadBalancerName'), '-probe01'))]" }
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "[concat(parameters('loadBalancerName'), '-probe01')]",
-            "properties": {
-              "protocol": "Tcp",
-              "port": 3389,
-              "intervalInSeconds": 15,
-              "numberOfProbes": 2
-            }
-          }
-        ],
-        "inboundNatPools": [
-          {
-            "name": "[concat(parameters('loadBalancerName'), '-natpool01')]",
-            "properties": {
-              "frontendIPConfiguration": { "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', parameters('loadBalancerName'), concat(parameters('loadBalancerName'), '-frontendconfig01'))]" },
-              "protocol": "Tcp",
-              "frontendPortRangeStart": "[parameters('InboundNATRuleFrontEndPortRangeStart')]",
-              "frontendPortRangeEnd": 20000,
-              "backendPort": 3389
+              "frontendIPConfiguration": {
+                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', parameters('loadBalancerName'), concat(parameters('loadBalancerName'), '-frontendconfig01'))]" // Config frontend du load balancer
+              },
+              "protocol": "Tcp", // Protocole TCP
+              "frontendPort": 443, // Port frontend
+              "backendPort": 443 // Port backend
             }
           }
         ]
+      }
+    },
+    {
+      "name": "[parameters('virtualMachineScaleSetName')]",
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "apiVersion": "[variables('virtualMachineScaleSetApiVersion')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "tier": "Standard",
+        "name": "[parameters('instanceSize')]",
+        "capacity": "[parameters('instanceCount')]"
       },
-
-      // Creation of VM scale set with OS configuration, image, and network connectivity settings
-      {
-        "name": "[parameters('virtualMachineScaleSetName')]",
-        "type": "Microsoft.Compute/virtualMachineScaleSets",
-        "apiVersion": "[variables('virtualMachineScaleSetApiVersion')]",
-        "location": "[parameters('location')]",
-        "sku": {
-          "tier": "Standard",
-          "name": "[parameters('instanceSize')]",
-          "capacity": "[parameters('instanceCount')]"
-        },
-        "properties": {
-          "upgradePolicy": { "mode": "[parameters('upgradePolicy')]" },
-          "scaleInPolicy": "[parameters('scaleInPolicy')]",
-          "virtualMachineProfile": { "networkProfile": { "networkInterfaceConfigurations": "[parameters('networkInterfaceConfigurations')]" } }
+      "properties": {
+        "upgradePolicy": { "mode": "[parameters('upgradePolicy')]" }, // Politique de mise à jour
+        "scaleInPolicy": "[parameters('scaleInPolicy')]", // Politique de mise à l'échelle vers l'intérieur
+        "virtualMachineProfile": {
+          "networkProfile": {
+            "networkInterfaceConfigurations": "[parameters('networkInterfaceConfigurations')]" // Configurations d'interface réseau des VM
+          }
         }
       }
-  
+    }
   ],
-
-  // Output configuration to return information on deployed resources
   "outputs": {
     "vmssId": {
       "type": "string",
-      "value": "[variables('vmssId')]"
+      "value": "[variables('vmssId')]" // ID du jeu d'échelles de machines virtuelles
     }
   }
 }
