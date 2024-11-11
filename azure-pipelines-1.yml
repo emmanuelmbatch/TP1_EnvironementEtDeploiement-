@@ -116,5 +116,5 @@ steps:
     csmParametersFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.parameters.json'
     # Override parameters in the ARM template with custom data and admin password
     overrideParameters: '-customData $(CloudInitContent) -adminPassword $(Key.vmadmina)'
-    # Set deployment mode to incremental, applying only changes
+    # Set deployment mode to Incremental to check for errors
     deploymentMode: 'Incremental'
