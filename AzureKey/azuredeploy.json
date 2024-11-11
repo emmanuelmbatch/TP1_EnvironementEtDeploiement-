@@ -40,6 +40,12 @@
     },
     "networkAcls": {
       "type": "object"
+    },
+    "secretName": {
+      "type": "string"
+    },
+    "secretValue": {
+      "type": "securestring"
     }
   },
   "variables": {},
