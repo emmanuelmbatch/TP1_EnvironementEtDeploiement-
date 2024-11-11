@@ -6,9 +6,6 @@
       "defaultValue": "KeyVaultas",
       "type": "String"
     },
-    "secretName": {
-      "type": "string"
-    },
     "secretValue": {
       "type": "securestring"
     }
