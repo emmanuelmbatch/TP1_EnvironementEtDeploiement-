@@ -1,11 +1,11 @@
 {
-  // Schéma de déploiement pour une template ARM, définissant la version de schéma et le contenu
+  // Deployment schema for an ARM template, defining the schema version and content
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
 
-  // Déclaration des paramètres utilisés pour la configuration et la personnalisation du déploiement
+  // Declaration of parameters used for configuration and deployment customization
   "parameters": {
-    // Paramètres de configuration du réseau virtuel, de l'interface réseau et de la sécurité
+    // Configuration parameters for virtual network, network interface, and security settings
     "location": { "type": "string" },
     "osDiskType": { "type": "string" },
     "virtualNetworkId": { "type": "string" },
@@ -13,7 +13,7 @@
     "networkSecurityGroups": { "type": "array" },
     "networkInterfaceConfigurations": { "type": "array" },
 
-    // Paramètres de configuration pour le pool backend et le load balancer
+    // Parameters for backend pool configuration and load balancer
     "backendPoolName": { "type": "string" },
     "loadBalancerName": { "type": "string" },
     "loadbalancingRuleFrontEndPort": { "type": "int" },
@@ -21,7 +21,7 @@
     "loadbalancingRuleProtocol": { "type": "string" },
     "InboundNATRuleFrontEndPortRangeStart": { "type": "int" },
 
-    // Configuration de la VM et du scale set
+    // VM and scale set configuration parameters
     "vmName": { "type": "string" },
     "virtualMachineScaleSetName": { "type": "string" },
     "instanceCount": { "type": "string" },
@@ -33,7 +33,7 @@
     "upgradePolicy": { "type": "string" },
     "hibernationEnabled": { "type": "bool" },
 
-    // Paramètres de configuration de sécurité et d'accès admin
+    // Parameters for security configuration and admin access settings
     "adminUsername": { "type": "string" },
     "adminPassword": { "type": "secureString" },
     "customData": { "type": "secureString" },
@@ -41,7 +41,7 @@
     "secureBoot": { "type": "bool" },
     "vTPM": { "type": "bool" },
 
-    // Paramètres pour la configuration avancée du réseau virtuel
+    // Advanced virtual network configuration parameters
     "vnetLocation": {
       "type": "string",
       "metadata": { "description": "Azure region for the deployment, resource group and resources." },
@@ -101,14 +101,14 @@
     }
   },
 
-  // Déclaration des variables utilisées pour simplifier la configuration des ressources
+  // Declaration of variables to simplify resource configuration
   "variables": {
-    // Versions de l'API pour le stockage, le réseau, et le scale set
+    // API versions for storage, networking, and the scale set
     "storageApiVersion": "2021-01-01",
     "networkApiVersion": "2020-11-01",
     "virtualMachineScaleSetApiVersion": "2024-07-01",
 
-    // Autres variables pour la configuration des ressources de nommage et de scale set
+    // Additional variables for naming configuration and scale set settings
     "namingInfix": "[toLower(substring(concat(parameters('virtualMachineScaleSetName'), uniqueString(resourceGroup().id)), 0, 9))]",
     "autoScaleResourceName": "[concat(substring(parameters('virtualMachineScaleSetName'), 0, min(length(parameters('virtualMachineScaleSetName')), 55)), 'autoscale')]",
     "vmssId": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSetName'))]",
@@ -119,9 +119,9 @@
     "vnetNatGatewayTags": "[if(contains(parameters('vnetTagsByResource'), 'Microsoft.Network/natGateways'), parameters('vnetTagsByResource')['Microsoft.Network/natGateways'], json('{}'))]"
   },
 
-  // Déclaration des ressources à déployer avec les configurations spécifiques de chaque composant
+  // Declaration of resources to deploy with specific configurations for each component
   "resources": [
-    // Groupe de sécurité réseau avec copie pour créer plusieurs groupes de sécurité
+    // Network security group with a copy loop to create multiple security groups
     {
       "name": "[parameters('networkSecurityGroups')[copyIndex()].name]",
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -134,7 +134,7 @@
       }
     },
 
-    // Adresse IP publique associée au load balancer
+    // Public IP address associated with the load balancer
     {
       "name": "[concat(parameters('loadBalancerName'), '-publicip')]",
       "type": "Microsoft.Network/publicIpAddresses",
@@ -149,7 +149,7 @@
       "zones": [ "1", "3" ]
     },
 
-    // Définition du load balancer avec configurations des règles de load balancing, de NAT et de sondes
+    // Definition of the load balancer with configuration of load balancing rules, NAT, and probes
     {
       "name": "[parameters('loadBalancerName')]",
       "type": "Microsoft.Network/loadBalancers",
@@ -206,7 +206,7 @@
         ]
       },
 
-      // Création du scale set de VM avec configuration d'OS, d'image, et de connectivité réseau
+      // Creation of VM scale set with OS configuration, image, and network connectivity settings
       {
         "name": "[parameters('virtualMachineScaleSetName')]",
         "type": "Microsoft.Compute/virtualMachineScaleSets",
@@ -225,7 +225,7 @@
       }
   ],
 
-  // Configuration des outputs pour retourner les informations de ressources déployées
+  // Output configuration to return information on deployed resources
   "outputs": {
     "vmssId": {
       "type": "string",
