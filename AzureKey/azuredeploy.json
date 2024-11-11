@@ -6,6 +6,10 @@
       "defaultValue": "KeyVaultas",
       "type": "String"
     },
+    "secretName": {
+      "defaultValue": "vmadmi",
+      "type": "string"
+    },
     "secretValue": {
       "type": "securestring"
     }
@@ -38,7 +42,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2024-04-01-preview",
-      "name": "[concat(parameters('vaults_KeyVaultas_name'), '/vmadmin')]",
+      "name": "[concat(parameters('vaults_KeyVaultas_name'), '/vmadmi')]",
       "location": "canadacentral",
       "dependsOn": [
         "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_KeyVaultas_name'))]"

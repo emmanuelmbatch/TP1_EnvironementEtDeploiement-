@@ -4,6 +4,12 @@
   "parameters": {
     "vaults_KeyVaultas_name": {
       "value": null
+    },
+    "secretName": {
+      "value": "vmadmin"
+    },
+    "secretValue": {
+      "value": null
     }
   }
 }
