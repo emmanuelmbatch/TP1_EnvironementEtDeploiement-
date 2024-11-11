@@ -2,23 +2,18 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    // Specifies the geographic location for the deployment
     "location": {
       "value": "canadacentral"
     },
-    // Specifies the type of OS disk used for virtual machines (Standard SSD)
     "osDiskType": {
       "value": "StandardSSD_LRS"
     },
-    // Virtual Network ID used to connect resources
     "virtualNetworkId": {
       "value": "/subscriptions/006ae760-9178-4c58-b965-89b732234df0/resourceGroups/TP1/providers/Microsoft.Network/virtualNetworks/vnet-canadacentral"
     },
-    // Name of the virtual network
     "virtualNetworkName": {
       "value": "vnet-canadacentral"
     },
-    // Network Security Group (NSG) configuration to control network traffic
     "networkSecurityGroups": {
       "value": [
         {
@@ -42,7 +37,6 @@
         }
       ]
     },
-    // Network Interface configuration for virtual machines
     "networkInterfaceConfigurations": {
       "value": [
         {
@@ -64,62 +58,48 @@
         }
       ]
     },
-    // Backend pool name for the load balancer
     "backendPoolName": {
       "value": "bepool"
     },
-    // Load balancer name
     "loadBalancerName": {
-      "value": "LoadBalencer"
+      "value": "Loadbalancer2"
     },
-    // Front-end port for the load balancing rule
     "loadbalancingRuleFrontEndPort": {
       "value": 80
     },
-    // Back-end port for the load balancing rule
     "loadbalancingRuleBackendEndPort": {
       "value": 80
     },
-    // Protocol used for the load balancing rule
     "loadbalancingRuleProtocol": {
       "value": "Tcp"
     },
-    // Port range for inbound NAT rules
     "InboundNATRuleFrontEndPortRangeStart": {
       "value": 50000
     },
-    // Virtual machine name
     "vmName": {
-      "value": "VMSaclet"
+      "value": "Vmss1"
     },
-    // Virtual Machine Scale Set name
     "virtualMachineScaleSetName": {
-      "value": "VMSaclet"
+      "value": "Vmss1"
     },
-    // Number of instances in the virtual machine scale set
     "instanceCount": {
       "value": "2"
     },
-    // Size of instances in the scale set
     "instanceSize": {
-      "value": "Standard_DS1_v2"
+      "value": "Standard_D2s_v3"
     },
-    // Availability zones to balance load across multiple zones
     "zone": {
       "value": [
         "1",
         "3"
       ]
     },
-    // Indicates if the scale set should balance across zones
     "zoneBalance": {
       "value": "false"
     },
-    // Number of fault domains for the scale set
     "platformFaultDomainCount": {
       "value": "1"
     },
-    // Scale-in policy for the virtual machine scale set
     "scaleInPolicy": {
       "value": {
         "rules": [
@@ -128,75 +108,57 @@
         "forceDeletion": false
       }
     },
-    // Update mode for the virtual machine scale set
     "upgradePolicy": {
       "value": "Manual"
     },
-    // Enables or disables hibernation
     "hibernationEnabled": {
       "value": false
     },
-    // Administrator username for virtual machines
     "adminUsername": {
-      "value": "vmadmin"
+      "value": "vmadmina"
     },
-    // Administrator password for virtual machines (left empty for security reasons)
     "adminPassword": {
       "value": null
     },
-    // Custom data for provisioning
     "customData": {
       "value": null
     },
-    // Security type for virtual machines (Trusted Launch for advanced security)
     "securityType": {
       "value": "TrustedLaunch"
     },
-    // Enables secure boot
     "secureBoot": {
       "value": true
     },
-    // Enables virtual TPM
     "vTPM": {
       "value": true
     },
-    // Location of the virtual network
     "vnetLocation": {
       "value": "canadacentral"
     },
-    // Extended location for the virtual network (empty in this case)
     "vnetExtendedLocation": {
       "value": {}
     },
-    // Associated virtual network name
     "vnetVirtualNetworkName": {
       "value": "vnet-canadacentral"
     },
-    // Resource group name for the virtual network
     "vnetResourceGroupName": {
       "value": "TP1"
     },
-    // Deployment name for the virtual network
     "vnetDeploymentName": {
-      "value": "network-interface-associated-virtual-network-20241109164215"
+      "value": "network-interface-associated-virtual-network-20241111123033"
     },
-    // List of NAT gateways with new public IP for the virtual network
     "vnetNatGatewaysWithNewPublicIpAddress": {
       "value": []
     },
-    // List of NAT gateways without new public IP for the virtual network
     "vnetNatGatewaysWithoutNewPublicIpAddress": {
       "value": []
     },
-    // List of new public IP address names for NAT
     "vnetNatGatewayPublicIpAddressesNewNames": {
       "value": []
     },
-    // List of new Network Security Groups for the virtual network
     "vnetNetworkSecurityGroupsNew": {
       "value": []
     },
-    // Virtual network properties, including subnets and address space
     "vnetProperties": {
       "value": {
         "subnets": [

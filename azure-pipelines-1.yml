@@ -1,120 +1,81 @@
-# Define trigger for pipeline execution when changes are made to the 'master' branch
-trigger:
-- master
+# Starter pipeline
+# A minimal pipeline setup for building and deploying code. Customize to include build, test, and deployment steps.
+# More details: https://aka.ms/yaml
 
-# Specify the agent pool to run the pipeline. Use the default agent pool.
+trigger:
+- master  # The pipeline will be triggered whenever there are changes in the 'master' branch.
+
 pool:
-  "default"
+  "default"  # Specifies the agent pool to use. Here, it's using the default pool.
 
 steps:
-# Step 1: Execute PowerShell script
 - task: PowerShell@2
   inputs:
-    # Indicate that the script is inline (written directly here)
     targetType: 'inline'
     script: |
-      # Read content from the Cloud-init.txt file and display it
+      # Read the content of 'Cloud-init.txt' file and store it in a variable
       $CloudContent = (Get-Content -Path 'C:\Users\Emmanuel\source\repos\TP1Deploiement\TP1Deploiement\Cloud-init.txt' -raw -Force)
+      
+      # Output the content to the console for logging
       Write-Host $CloudContent
-      # Encode the Cloud-init content to Base64 format
+      
+      # Convert the content to Base64 encoding
       $encodedContent = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($CloudContent))
-      # Display the Base64 encoded content
+      
+      # Output the encoded content to the console
       Write-Host $encodedContent
-      # Set a pipeline variable with the encoded Cloud-init content
+      
+      # Set the encoded content as a pipeline variable 'CloudInitContent'
       Write-Host "##vso[task.setvariable variable=CloudInitContent;]$encodedContent"
 
-# Step 2: Output the CloudInitContent variable value to the console
 - script: |
-    echo $(CloudInitContent)
+    echo $(CloudInitContent)  # Print the 'CloudInitContent' variable to the console.
 
-# Step 3: Deploy Azure Resource Manager template for creating or updating a resource group with Key Vault
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
-    # Define deployment scope as a specific Resource Group
     deploymentScope: 'Resource Group'
-    # Provide the connection to Azure subscription
-    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
-    # Specify the subscription ID
-    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'
-    # Specify action as creating or updating the resource group
+    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'  # Connection to the Azure subscription.
+    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'  # ID of the Azure subscription.
     action: 'Create Or Update Resource Group'
-    # Name of the resource group for deployment
-    resourceGroupName: 'TP1_Key_Vault'
-    # Define the Azure region for the resource group
-    location: 'Canada Central'
-    # Set the template location to use a linked artifact
-    templateLocation: 'Linked artifact'
-    # Path to the Azure Resource Manager (ARM) template file for deployment
-    csmFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'
-    # Path to the parameters file for the ARM template
-    csmParametersFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'
-    # Specify the deployment mode as incremental, so only changes are applied
-    deploymentMode: 'Incremental'
-    # Capture deployment outputs for later steps
-    deploymentOutputs: 'KeyVaultDeployement'
+    resourceGroupName: 'TP1_Key_Vault'  # Name of the resource group for deployment.
+    location: 'Canada Central'  # Region where the resource group will be created.
+    templateLocation: 'Linked artifact'  # Template is located in the linked repository.
+    csmFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'  # Path to the ARM template JSON file.
+    csmParametersFile: '$(Build.SourcesDirectory)\AzureKey\azuredeploy.json'  # Path to the parameters file.
+    deploymentMode: 'Incremental'  # Only updates resources that are modified.
+    deploymentOutputs: 'KeyVaultDeployement'  # Name of the output variable for deployment results.
 
-# Step 4: Retrieve secret value from Azure Key Vault
 - task: AzureKeyVault@2
   displayName: Get Secret
   name: Key
   inputs:
-    # Provide the connection to Azure subscription
-    azureSubscription: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
-    # Specify the name of the Key Vault
-    KeyVaultName: 'KeyVaultas'
-    # Filter to retrieve a specific secret by name
-    SecretsFilter: 'vmadmina'
-    # Do not run this task as a pre-job
-    RunAsPreJob: false
-
-# Step 5: Validate the deployment with ARM template and parameters
+        azureSubscription: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
+        KeyVaultName: 'KeyVaultas'
+        SecretsFilter: 'vmadmina'
+        RunAsPreJob: false
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
-    # Define deployment scope as a specific Resource Group
     deploymentScope: 'Resource Group'
-    # Provide the connection to Azure subscription
-    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
-    # Specify the subscription ID
-    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'
-    # Specify action as creating or updating the resource group
+    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'  # Connection to the Azure subscription.
+    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'  # ID of the Azure subscription.
     action: 'Create Or Update Resource Group'
-    # Name of the resource group for deployment
     resourceGroupName: 'TP1'
-    # Define the Azure region for the resource group
     location: 'Canada Central'
-    # Set the template location to use a linked artifact
     templateLocation: 'Linked artifact'
-    # Path to the ARM template file for deployment
     csmFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.json'
-    # Path to the parameters file for the ARM template
     csmParametersFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.parameters.json'
-    # Override parameters in the ARM template with custom data and admin password
     overrideParameters: '-customData $(CloudInitContent) -adminPassword $(Key.vmadmina)'
-    # Set deployment mode to validation to check for errors
     deploymentMode: 'Validation'
-
-# Step 6: Perform the actual deployment with ARM template and parameters
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
-    # Define deployment scope as a specific Resource Group
     deploymentScope: 'Resource Group'
-    # Provide the connection to Azure subscription
-    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'
-    # Specify the subscription ID
-    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'
-    # Specify action as creating or updating the resource group
+    azureResourceManagerConnection: 'Abonnement Azure 1(006ae760-9178-4c58-b965-89b732234df0)'  # Connection to the Azure subscription.
+    subscriptionId: '006ae760-9178-4c58-b965-89b732234df0'  # ID of the Azure subscription.
     action: 'Create Or Update Resource Group'
-    # Name of the resource group for deployment
     resourceGroupName: 'TP1'
-    # Define the Azure region for the resource group
     location: 'Canada Central'
-    # Set the template location to use a linked artifact
     templateLocation: 'Linked artifact'
-    # Path to the ARM template file for deployment
     csmFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.json'
-    # Path to the parameters file for the ARM template
     csmParametersFile: '$(Build.SourcesDirectory)/TP1Deploiement/azuredeploy.parameters.json'
-    # Override parameters in the ARM template with custom data and admin password
     overrideParameters: '-customData $(CloudInitContent) -adminPassword $(Key.vmadmina)'
-    # Set deployment mode to incremental, applying only changes
     deploymentMode: 'Incremental'
